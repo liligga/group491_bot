@@ -5,11 +5,15 @@ from bot_config import bot, dp
 from handlers.start import start_router
 from handlers.picture import picture_router
 from handlers.other_messages import other_router
+from handlers.book_catalog import catalog_router
+from handlers.complaint_dialog import complaint_router
 
 
 async def main():
     dp.include_router(start_router)
     dp.include_router(picture_router)
+    dp.include_router(catalog_router)
+    dp.include_router(complaint_router)
 
     # в самом конце
     dp.include_router(other_router)
