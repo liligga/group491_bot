@@ -1,12 +1,17 @@
 import asyncio
 import logging
+from aiogram import Bot
 
-from bot_config import bot, dp
+from bot_config import bot, dp, database
 from handlers.start import start_router
 from handlers.picture import picture_router
 from handlers.other_messages import other_router
 from handlers.book_catalog import catalog_router
 from handlers.complaint_dialog import complaint_router
+
+
+async def on_startup(bot: Bot):
+    database.create_tables()
 
 
 async def main():
@@ -17,6 +22,8 @@ async def main():
 
     # в самом конце
     dp.include_router(other_router)
+
+    dp.startup.register(on_startup)
     # запуск бота
     await dp.start_polling(bot)
 
