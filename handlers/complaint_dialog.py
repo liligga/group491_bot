@@ -3,6 +3,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
+from database import Database
 from bot_config import database
 
 
@@ -45,7 +46,11 @@ async def process_age(message: types.Message, state: FSMContext):
 
 
 @complaint_router.message(Complaint.complaint)
-async def process_message(message: types.Message, state: FSMContext):
+async def process_message(
+    message: types.Message, 
+    state: FSMContext, 
+    # database: Database,
+):
     complaint = message.text
     await state.update_data(complaint=complaint)
     await message.answer("Спасибо")
