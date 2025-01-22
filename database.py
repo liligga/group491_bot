@@ -45,18 +45,15 @@ class Database:
             """,
                 (data["name"], data["year"], data["author"], data["price"])
             )
-            # conn.execute(
+            # conn.execute(    как не делать
             #     f"""INSERT INTO books (name, year, author, price)
             #      VALUES ({data['name']}, {data['year']}, {data['author']}, {data['price']})"""
             # )
 
-
-# conn = sqlite3.connect("db.sqlite")
-# cursor = conn.cursor()
-# with sqlite3.connect("db.sqlite") as conn:
-#     cursor = conn.cursor()
-#     conn.execute("""
-#     CREATE TABLE IF NOT EXISTS complaints(
-       
-#     )
-#     """)
+    def get_all_books(self):
+        with sqlite3.connect(self.path) as conn:
+            cursor = conn.cursor()
+            result = conn.execute("SELECT id, author, price, year FROM books")
+            result.row_factory = sqlite3.Row
+            data = result.fetchall()
+            return [dict(row) for row in data]
