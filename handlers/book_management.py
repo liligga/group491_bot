@@ -1,7 +1,8 @@
 from aiogram import Router, F, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.state import State, StatesGroup, default_state
+from pprint import pprint
 
 from database import Database
 from bot_config import database
@@ -11,6 +12,7 @@ book_admin_router = Router()
 book_admin_router.message.filter(
     F.from_user.id == 243154734
 )
+# CRUD
 
 
 class Book(StatesGroup):
@@ -18,8 +20,9 @@ class Book(StatesGroup):
     year = State()
     author = State()
     price = State()
+    cover = State()
 
-@book_admin_router.message(Command("newbook"))
+@book_admin_router.message(Command("newbook"), default_state)
 async def new_book(message: types.Message, state: FSMContext):
     await message.answer("Введите название книги")
     message.from_user.id
@@ -62,6 +65,15 @@ async def process_price(message: types.Message, state: FSMContext):
         await message.answer("Вводите только положительную цену")
         return
     await state.update_data(price=price)
+    await message.answer("Загрузите обложку")
+    await state.set_state(Book.cover)
+
+@book_admin_router.message(Book.cover, F.photo)
+async def process_cover(message: types.Message, state: FSMContext):
+    covers = message.photo
+    pprint(covers)
+    biggest_image = covers[-1]
+    await state.update_data(cover = biggest_image.file_id)
     await message.answer("Спасибо, книга была сохранена")
     data = await state.get_data()
     print(data)

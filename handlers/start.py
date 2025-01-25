@@ -23,6 +23,9 @@ async def start_handler(message: types.Message):
             ],
             [
                 types.InlineKeyboardButton(text="Каталог", callback_data="book_catalog")
+            ],
+            [
+                types.InlineKeyboardButton(text="Каталог с пагинацией", callback_data="book_catalog_pagination")
             ]
         ]
     )

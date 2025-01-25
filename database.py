@@ -22,7 +22,8 @@ class Database:
                 name TEXT,
                 year INTEGER,
                 author TEXT,
-                price INTEGER
+                price INTEGER,
+                cover TEXT
             )
             """)
 
@@ -40,10 +41,10 @@ class Database:
         with sqlite3.connect(self.path) as conn:
             conn.execute(
             """
-                INSERT INTO books (name, year, author, price)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO books (name, year, author, price, cover)
+                VALUES (?, ?, ?, ?, ?)
             """,
-                (data["name"], data["year"], data["author"], data["price"])
+                (data["name"], data["year"], data["author"], data["price"], data["cover"])
             )
             # conn.execute(    как не делать
             #     f"""INSERT INTO books (name, year, author, price)
@@ -53,7 +54,7 @@ class Database:
     def get_all_books(self):
         with sqlite3.connect(self.path) as conn:
             cursor = conn.cursor()
-            result = conn.execute("SELECT id, author, price, year FROM books")
+            result = conn.execute("SELECT * FROM books")
             result.row_factory = sqlite3.Row
             data = result.fetchall()
             return [dict(row) for row in data]

@@ -1,7 +1,7 @@
 from aiogram import Router, F, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.state import State, StatesGroup, default_state
 
 from database import Database
 from bot_config import database
@@ -22,7 +22,7 @@ async def stop_dialog(message: types.Message, state: FSMContext):
     await state.clear()
 
 
-@complaint_router.message(Command("complaint"))
+@complaint_router.message(Command("complaint"), default_state)
 async def start_complaint(message: types.Message, state: FSMContext):
     await message.answer("Оставьте жалобу ответив на несколько вопросов. Можете остановить диалог с ботом введя '/stop' или 'стоп'")
     await message.answer("Как Вас зовут?")
